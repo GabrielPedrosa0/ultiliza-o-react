@@ -81,35 +81,58 @@ import TabelaOS from '../../components/os/TabelaOS'
 
 export function SecItensOS() {
   const [itens, setItens] = useState(ITENS[1042])
+  const adicionar = (tipo) =>
+    setItens((atual) => [
+      ...atual,
+      tipo === 'servico'
+        ? {
+            id: Date.now(),
+            tipo,
+            descricao: 'Alinhamento e balanceamento',
+            quantidade: 1,
+            valor_unitario: 160,
+            tempo_estimado_min: 60,
+          }
+        : {
+            id: Date.now(),
+            tipo,
+            descricao: 'Pastilha de freio dianteira',
+            codigo: 'PST-DIA-0451',
+            quantidade: 1,
+            valor_unitario: 140,
+          },
+    ])
   return (
     <PaginaSecao
       grupo="Ordem de serviço"
       titulo="Serviços e peças"
-      descricao="Itens da OS com o total (soma de quantidade × valor). Com onEditar/onRemover aparecem os botões de cada linha; somenteLeitura esconde tudo (OS entregue ou cancelada)."
+      descricao="Como no Figma do Detalhe da OS: Serviços e Peças em grupos separados, cada um com o seu “+ Adicionar”, e embaixo os subtotais e o Total (soma de quantidade × valor). somenteLeitura esconde os botões (OS entregue ou cancelada)."
       arquivos={[`${OS}ItensOS.jsx`, `${OS}os.css`, 'utils/ordemServico.js']}
       responsavel="Integrante 3"
     >
       <Exemplo
-        titulo="Editável (clique na lixeira)"
+        titulo="Editável (clique em “+ Adicionar” ou na lixeira)"
         codigo={`
 import ItensOS from '../../components/os/ItensOS'
 
 const { dados: itens, recarregar } = useApi(() => listarItens(os.id), [os.id])
 
-<Cartao titulo="Serviços e peças" acao={<Botao variante="fantasma" tamanho="pequeno" icone={Plus}>Adicionar</Botao>}>
+<Cartao>
   <ItensOS
     itens={itens}
     somenteLeitura={statusEncerrado(os.status)}
+    onAdicionar={(tipo) => abrirModal(tipo)}          {/* 'servico' ou 'peca' */}
     onEditar={(item) => abrirEdicao(item)}
     onRemover={async (item) => { await removerItem(os.id, item.id); recarregar() }}
   />
 </Cartao>`}
         coluna
       >
-        <div style={{ maxWidth: 440 }}>
-          <Cartao titulo="Serviços e peças">
+        <div style={{ width: '100%', maxWidth: 620 }}>
+          <Cartao>
             <ItensOS
               itens={itens}
+              onAdicionar={adicionar}
               onRemover={(item) => setItens(itens.filter((i) => i.id !== item.id))}
               onEditar={() => {}}
             />
@@ -119,11 +142,12 @@ const { dados: itens, recarregar } = useApi(() => listarItens(os.id), [os.id])
       <Bloco titulo="Formato de cada item (proposta para o Integrante 3)">
         <TabelaProps
           linhas={[
-            ['tipo', "'servico' | 'peca'", '', '“Mão de obra” ou “Peça” na tela'],
+            ['tipo', "'servico' | 'peca'", '', 'Separa os dois grupos'],
             ['descricao', 'string', '', 'Obrigatório'],
-            ['codigo', 'string | null', '', 'Ex.: FLT-OL-0098'],
+            ['codigo', 'string | null', '', 'Peças: ex.: FLT-OL-0098'],
             ['quantidade', 'number', '1', 'Maior que zero'],
-            ['valor_unitario', 'number (reais)', '', 'Maior ou igual a zero'],
+            ['valor_unitario', 'number (reais)', '', 'Serviço: parte do preço base do catálogo'],
+            ['tempo_estimado_min', 'number', '', 'Serviços: “tempo estimado 40 min”'],
           ]}
         />
       </Bloco>

@@ -1,5 +1,5 @@
 // Nova ordem. Integrante 2.
-// Troque o <EmConstrucao> pelo conteúdo da tela. Modelo pronto: pages/Painel/Painel.jsx.
+// Troque o <EmConstrucao> pelo conteúdo da tela. Modelo pronto: pages/Painel/PainelPage.jsx.
 import CabecalhoPagina from '../../components/layout/CabecalhoPagina'
 import EmConstrucao from '../../components/ui/EmConstrucao'
 

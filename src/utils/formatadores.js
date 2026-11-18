@@ -141,6 +141,59 @@ export function paraCampoDataHora(valor) {
   return valor ? String(valor).slice(0, 16) : ''
 }
 
+// "12345678900" -> "123.456.789-00"; 14 dígitos -> "12.345.678/0001-90" (CNPJ)
+export function formatarCpfCnpj(valor) {
+  const d = String(valor ?? '').replace(/\D/g, '')
+  if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+  if (d.length === 14) return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
+  return valor ?? ''
+}
+
+// "61800000" -> "61800-000"
+export function formatarCep(valor) {
+  const d = String(valor ?? '').replace(/\D/g, '')
+  return d.length === 8 ? `${d.slice(0, 5)}-${d.slice(5)}` : (valor ?? '')
+}
+
+// Minutos -> "40 min", "1 h", "1 h 30 min" (tempo estimado dos serviços)
+export function formatarDuracao(minutos) {
+  const m = Number(minutos)
+  if (!m) return '—'
+  const h = Math.floor(m / 60)
+  const resto = m % 60
+  if (!h) return `${resto} min`
+  return resto ? `${h} h ${resto} min` : `${h} h`
+}
+
+// "08:00:00" e "17:00" -> "08:00–17:00" (expediente do mecânico)
+export function formatarExpediente(inicio, fim) {
+  if (!inicio || !fim) return 'Sem horário'
+  return `${String(inicio).slice(0, 5)}–${String(fim).slice(0, 5)}`
+}
+
+// "2024-03-10" -> "Março de 2024" ("Cliente desde")
+export function formatarMesAno(valor) {
+  const d = paraData(valor)
+  if (!d) return '—'
+  const mes = d.toLocaleDateString('pt-BR', { month: 'long' })
+  return `${mes[0].toUpperCase()}${mes.slice(1)} de ${d.getFullYear()}`
+}
+
+// Chassi tem 17 caracteres; no celular cabe só o começo e o fim: "9BWAB05U…4821"
+export function encurtarChassi(chassi) {
+  const c = String(chassi ?? '')
+  return c.length > 12 ? `${c.slice(0, 8)}…${c.slice(-4)}` : c || '—'
+}
+
+// "Rafael Lima" -> "Rafael" (coluna Mecânico da tabela)
+export function primeiroNome(nome) {
+  return (
+    String(nome ?? '')
+      .trim()
+      .split(/\s+/)[0] || ''
+  )
+}
+
 // "Marina Souza" -> "MS"; "Usuário" -> "U"
 export function iniciais(nome) {
   const partes = String(nome ?? '')

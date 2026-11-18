@@ -8,14 +8,10 @@ import BarraSuperior from './BarraSuperior'
 import MenuLateral from './MenuLateral'
 import './layout.css'
 
-const PERFIS = { recepcao: 'Recepção', mecanico: 'Mecânico', gerente: 'Gerente' }
-
 export default function LayoutPrincipal({ children }) {
   const navigate = useNavigate()
   const usuario = usuarioSalvo()
-  const usuarioMenu = usuario
-    ? { nome: usuario.nome, perfil: PERFIS[usuario.perfil?.toLowerCase()] ?? usuario.perfil }
-    : { nome: 'Usuário', perfil: 'Recepção' }
+  const usuarioMenu = usuario ? { nome: usuario.nome, perfil: usuario.perfil } : { nome: 'Usuário', perfil: 'RECEPCAO' }
 
   return (
     <div className="layout">

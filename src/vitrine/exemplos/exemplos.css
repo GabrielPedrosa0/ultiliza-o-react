@@ -88,3 +88,71 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.detalhe-os__chassi {
+  font-family: var(--fonte-mono);
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+.detalhe-os__telefone {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--texto-primario);
+  font-weight: 500;
+}
+
+/* ------------------------------------------ Mecânicos, Serviços e Peças */
+.exemplo-ajuda {
+  margin: 0;
+}
+.exemplo-pessoa {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  font-weight: 500;
+}
+.exemplo-codigo {
+  font: 400 13px/18px var(--fonte-mono);
+  color: var(--texto-secundario);
+}
+.exemplo-busca {
+  max-width: 480px;
+}
+.exemplo-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  min-height: 64px;
+  padding: var(--espaco-3) var(--espaco-4);
+  border-bottom: 1px solid var(--borda-padrao);
+}
+.exemplo-linha:last-child {
+  border-bottom: 0;
+}
+.exemplo-linha > span:first-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.exemplo-linha b {
+  font-weight: 500;
+}
+.exemplo-linha small {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--texto-apoio);
+}
+.exemplo-linha small.exemplo-alerta {
+  color: var(--status-atencao-texto);
+}
+.exemplo-linha > span:last-child {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------ Novo cliente */
+.exemplo-form {
+  max-width: 960px;
+}

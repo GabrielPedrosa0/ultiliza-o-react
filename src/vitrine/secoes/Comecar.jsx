@@ -7,12 +7,14 @@ const ESTRUTURA = `
 frontend/src/
 ├── styles/           tokens.css (cores, fontes, espaços) e global.css
 ├── components/
-│   ├── ui/           Botao, Campo, SeloStatus, Placa, Avatar, Indicador, Filtros,
-│   │                 Cartao, ItemLista, BarraBusca, Aviso, Estados, Modal, EmConstrucao
+│   ├── ui/           Botao, Campo, GrupoCampos, Interruptor, SeloStatus, Etiqueta,
+│   │                 Placa, Avatar, Indicador, Filtros, Abas, Tabela, Cartao,
+│   │                 ItemLista, BarraBusca, Aviso, Estados, Modal, EmConstrucao
 │   ├── layout/       LayoutPrincipal, MenuLateral, BarraSuperior, BarraAbas,
 │   │                 CabecalhoPagina, RodapeAcoes, Logo, itensMenu.js
-│   └── os/           CartaoOS, TabelaOS, ItensOS
-├── constants/        statusOS.js (os 6 status, cores e botões)
+│   ├── os/           CartaoOS, TabelaOS, ItensOS, Apontamentos
+│   └── veiculos/     LinhaVeiculo
+├── constants/        statusOS.js, apontamentos.js, perfis.js
 ├── utils/            formatadores.js, validadores.js, ordemServico.js
 ├── hooks/            useApi.js (useApi, useAcao), useDebounce.js
 ├── services/         api.js + um service por grupo de rotas
@@ -90,6 +92,21 @@ export default function ComoUsar() {
           <code>uvicorn app:app --reload</code> dentro de <code>backend/</code> e, para ter dados,{' '}
           <code>python scripts/dados_exemplo.py</code> na raiz do repositório.
         </p>
+        <ul className="vt-lista">
+          <li>
+            Ao lado da escolha aparece a situação: <strong>Conectado</strong> ou <strong>Backend desligado</strong>.
+            Desligado, a vitrine mostra os comandos para ligar e confere de novo a cada 5 segundos.
+          </li>
+          <li>
+            “Essa rota ainda não existe no backend” quer dizer que o FastAPI respondeu, mas ninguém fez aquela rota
+            ainda (ex.: <code>/api/mecanicos</code>, <code>/api/pecas</code>, apontamentos). Use os dados de exemplo até
+            a rota ficar pronta.
+          </li>
+          <li>
+            Por que não funciona no site publicado? Lá não existe um FastAPI em <code>/api</code> para responder, então
+            a opção nem aparece.
+          </li>
+        </ul>
       </Bloco>
 
       <Bloco titulo="Regras do Figma que valem para todos">

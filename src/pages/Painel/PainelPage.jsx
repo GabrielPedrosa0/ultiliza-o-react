@@ -2,16 +2,20 @@
 // ESTA TELA É O MODELO DE REFERÊNCIA do grupo: mostra o caminho completo
 // service -> useApi -> estados (carregando / erro / vazio) -> componentes.
 // Especificação 3.2 e regras dos indicadores na 7.1.
-import { CircleCheck, Plus, Banknote, PackageSearch, Wrench, CalendarCheck } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { CircleCheck, Plus, Banknote, PackageSearch, Wrench, CalendarCheck, HardHat } from 'lucide-react'
 import CabecalhoPagina from '../../components/layout/CabecalhoPagina'
 import Botao from '../../components/ui/Botao'
 import Indicador from '../../components/ui/Indicador'
+import Cartao from '../../components/ui/Cartao'
+import ItemLista from '../../components/ui/ItemLista'
 import { EstadoCarregando, EstadoErro, EstadoVazio } from '../../components/ui/Estados'
 import CartaoOS from '../../components/os/CartaoOS'
 import TabelaOS from '../../components/os/TabelaOS'
 import { useApi } from '../../hooks/useApi'
 import { listarEntregasHoje, listarOrdensRecentes, obterResumo } from '../../services/dashboardService'
-import { formatarMoedaCurta, plural } from '../../utils/formatadores'
+import { listarMecanicos } from '../../services/mecanicosService'
+import { formatarExpediente, formatarMoedaCurta, plural } from '../../utils/formatadores'
 import './painel.css'
 
 function Indicadores() {
@@ -69,6 +73,20 @@ function Indicadores() {
   )
 }
 
+// Título da seção com o link "Ver todas" / "Ver equipe" à direita (Figma).
+function CabecalhoSecao({ titulo, link, rotuloLink }) {
+  return (
+    <div className="cabecalho-secao">
+      <h2 className="titulo-secao">{titulo}</h2>
+      {link && (
+        <Link to={link} className="link-secao">
+          {rotuloLink}
+        </Link>
+      )}
+    </div>
+  )
+}
+
 // PC: tabela com as 10 OS abertas mais recentes.
 function OrdensRecentes() {
   const { dados, carregando, erro, recarregar } = useApi(() => listarOrdensRecentes({ limite: 10 }))
@@ -92,7 +110,7 @@ function OrdensRecentes() {
 
   return (
     <section className="secao so-pc">
-      <h2 className="titulo-secao">Ordens recentes</h2>
+      <CabecalhoSecao titulo="Ordens recentes" link="/ordens" rotuloLink="Ver todas" />
       {conteudo}
     </section>
   )
@@ -130,7 +148,40 @@ function EntregasHoje() {
 
   return (
     <section className="secao so-celular">
-      <h2 className="titulo-secao">Entregas de hoje</h2>
+      <CabecalhoSecao titulo="Entregas de hoje" link="/ordens" rotuloLink="Ver todas" />
+      {conteudo}
+    </section>
+  )
+}
+
+// PC e celular: quem está no horário agora (Figma "Mecânicos em expediente").
+// Rota proposta GET /api/mecanicos?em_expediente=true (ver services/mecanicosService.js).
+function MecanicosEmExpediente() {
+  const { dados, carregando, erro, recarregar } = useApi(() => listarMecanicos({ emExpediente: true }))
+
+  let conteudo
+  if (carregando) conteudo = <EstadoCarregando texto="Carregando equipe..." />
+  else if (erro) conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
+  else if (dados.length === 0) conteudo = <EstadoVazio icone={HardHat} titulo="Ninguém em expediente agora." />
+  else
+    conteudo = (
+      <Cartao semEspaco>
+        {dados.map((m) => (
+          <ItemLista
+            key={m.id}
+            avatar={m.nome}
+            titulo={m.nome}
+            subtitulo={`${formatarExpediente(m.expediente_inicio, m.expediente_fim)} · ${
+              m.os_em_servico > 0 ? `${plural(m.os_em_servico, 'OS', 'OS')} em serviço` : 'sem OS no momento'
+            }`}
+          />
+        ))}
+      </Cartao>
+    )
+
+  return (
+    <section className="secao">
+      <CabecalhoSecao titulo="Mecânicos em expediente" link="/mecanicos" rotuloLink="Ver equipe" />
       {conteudo}
     </section>
   )
@@ -150,8 +201,11 @@ export default function PainelPage() {
       />
       <div className="pagina painel">
         <Indicadores />
-        <OrdensRecentes />
-        <EntregasHoje />
+        <div className="painel__colunas">
+          <OrdensRecentes />
+          <EntregasHoje />
+          <MecanicosEmExpediente />
+        </div>
       </div>
     </>
   )

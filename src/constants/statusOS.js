@@ -32,6 +32,16 @@ export const FILTROS_OS = [
   })),
 ]
 
+// Garantia não é um status: é uma marca da OS (retorno de serviço já feito, sem cobrança).
+// No PC ela aparece como mais um filtro (Figma "PC — Ordens de serviço").
+export const FILTRO_GARANTIA = { valor: 'GARANTIA', rotulo: 'Garantia' }
+export const FILTROS_OS_PC = [...FILTROS_OS, FILTRO_GARANTIA]
+
+// No celular cabem menos pílulas (Figma "Celular — Ordens de serviço").
+export const FILTROS_OS_CELULAR = FILTROS_OS.filter((f) =>
+  ['', 'EM_SERVICO', 'AGUARDANDO_PECA', 'PRONTA'].includes(f.valor),
+)
+
 // Botão principal do Detalhe da OS, conforme o status atual (seção 3.4).
 // Entregue e Cancelado não têm botão.
 export const ACAO_PRINCIPAL = {

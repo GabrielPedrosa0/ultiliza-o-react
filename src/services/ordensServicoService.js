@@ -32,3 +32,11 @@ export const enviarOrcamento = (id) => apiPost(`/ordens-servico/${id}/enviar-orc
 
 // POST /api/ordens-servico/1042/marcar-pronta
 export const marcarPronta = (id) => apiPost(`/ordens-servico/${id}/marcar-pronta`)
+
+// ---- Apontamentos: a linha do tempo da OS (Integrante 3, rota proposta) ----
+
+// GET /api/ordens-servico/1042/apontamentos  -> [{ id, tipo, data, descricao, usuario }]
+export const listarApontamentos = (id) => apiGet(`/ordens-servico/${id}/apontamentos`)
+
+// POST /api/ordens-servico/1042/apontamentos  { tipo, descricao }
+export const registrarApontamento = (id, dados) => apiPost(`/ordens-servico/${id}/apontamentos`, dados)

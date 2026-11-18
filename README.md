@@ -22,7 +22,18 @@ npm run dev          # http://localhost:5174
 ```
 
 Rodando no computador aparece, no topo, a opção **Backend real**: com o FastAPI do projeto ligado em
-`http://127.0.0.1:8000`, a vitrine passa a usar os dados de verdade. No site publicado ela usa sempre os de exemplo.
+`http://127.0.0.1:8000`, a vitrine passa a usar os dados de verdade e mostra **Conectado** ou **Backend desligado**
+(com os comandos para ligar). No site publicado ela usa sempre os de exemplo: lá não existe backend em `/api`.
+
+Para ligar o backend (no repositório `oficina-mecanica-os`):
+
+```bash
+cd backend
+python3 -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt                      # inclui o uvicorn
+uvicorn app:app --reload
+python ../scripts/dados_exemplo.py                   # em outro terminal: dados do Figma
+```
 
 | Comando | O que faz |
 |---|---|
@@ -44,7 +55,7 @@ git init
 git add .
 git commit -m "Guia do frontend e vitrine de componentes"
 git branch -M main
-git remote add origin https://github.com/GabrielPedrosa0/ultiliza-o-react.git
+git remote add origin https://github.com/USUARIO/oficina-guia-frontend.git   # crie o repositório vazio antes, no site
 git push -u origin main
 ```
 
@@ -53,7 +64,7 @@ Depois escolha **um** dos dois jeitos abaixo (os dois são grátis).
 ### 2a. Pela Vercel (mais simples)
 
 1. Entre em https://vercel.com com a conta do GitHub.
-2. **Add New → Project**, escolha o repositório `ultiliza-o-react` e clique em **Deploy**.
+2. **Add New → Project**, escolha o repositório `oficina-guia-frontend` e clique em **Deploy**.
    O `vercel.json` já diz tudo que ela precisa (Vite, `npm run build`, pasta `dist`).
 3. Em cerca de 1 minuto sai o link `https://oficina-guia-frontend.vercel.app` (ou parecido).
 
@@ -63,7 +74,7 @@ Cada `git push` na `main` publica de novo sozinho, e cada Pull Request ganha um 
 
 1. No repositório: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 2. Faça um `git push` (ou, na aba **Actions**, abra “Publicar no GitHub Pages” e clique em **Run workflow**).
-3. Quando o workflow ficar verde, o site está em `https://gabrielpedrosa0.github.io/ultiliza-o-react/`.
+3. Quando o workflow ficar verde, o site está em `https://USUARIO.github.io/oficina-guia-frontend/`.
 
 O workflow fica em `.github/workflows/github-pages.yml`: instala, confere o código, gera o `dist/` e publica.
 Cada `git push` na `main` publica de novo.

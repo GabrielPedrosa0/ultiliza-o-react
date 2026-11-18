@@ -39,7 +39,9 @@ São três terminais, todos a partir da pasta do repositório:
 ```bash
 # Terminal 1 — backend em http://127.0.0.1:8000
 cd backend
-pip install -r requirements.txt
+python3 -m venv .venv            # só na primeira vez: cria um Python só do projeto
+source .venv/bin/activate        # no Windows: .venv\Scripts\activate
+pip install -r requirements.txt  # só na primeira vez (instala FastAPI e uvicorn)
 uvicorn app:app --reload
 
 # Terminal 2 — coloca no backend os dados de exemplo do Figma (rode de novo se reiniciar o backend)
@@ -63,13 +65,14 @@ frontend/src/
 ├── routes/             AppRoutes.jsx: qual endereço abre qual tela
 ├── pages/              UMA PASTA POR TELA — é aqui que você vai trabalhar
 ├── components/         peças prontas para montar as telas
-│   ├── ui/             botão, campo, selo de status, cartão, modal...
+│   ├── ui/             botão, campo, selo, etiqueta, abas, tabela, cartão, modal...
 │   ├── layout/         menu lateral, abas do celular, cabeçalho da página
-│   └── os/             cartão e tabela de ordem de serviço, itens da OS
+│   ├── os/             cartão e tabela de OS, serviços e peças, apontamentos
+│   └── veiculos/       linha de veículo das listas do celular
 ├── services/           funções que falam com o backend (uma por rota)
 ├── hooks/              useApi, useAcao, useDebounce (ajudantes do React)
 ├── utils/              formatar dinheiro, data, placa; validar campos
-├── constants/          os status da OS com texto e cor
+├── constants/          status da OS, tipos de apontamento e perfis de acesso
 └── styles/             cores, fontes e espaços do Figma
 ```
 
@@ -278,6 +281,11 @@ const status = parametros.get('status')                // 'PRONTA'
 
 Criou uma tela nova? Acrescente a `<Route>` no `AppRoutes.jsx` e, se ela aparece no menu, o item em
 `components/layout/itensMenu.js`.
+
+O menu segue o Figma do MVP. No PC: Painel, Ordens de serviço, Clientes, Veículos, Mecânicos, Serviços, Peças e
+Usuários (este só para o Gerente). No celular, as abas são Início, Ordens, Clientes, Veículos e Mais; Mecânicos,
+Serviços, Peças e Usuários ficam dentro de **Mais**. Para esconder um item de quem não é Gerente, escreva
+`perfis: ['GERENTE']` no item.
 
 ## 8. Estilo: como a tela fica bonita
 
@@ -585,7 +593,9 @@ Abra o **F12** sempre que algo estranho acontecer. As abas que importam:
 |---|---|---|
 | Tela toda branca | Erro de JavaScript | Leia o Console; o arquivo e a linha estão lá |
 | `Cannot read properties of null (reading 'map')` | Usou `dados` antes de chegar | Trate o `carregando` antes de usar `dados` |
-| “Sem conexão com o servidor” | O backend não está rodando | Terminal 1: `uvicorn app:app --reload` |
+| “Sem conexão com o servidor” | O backend não está rodando | Terminal 1: ative o `.venv` e rode `uvicorn app:app --reload` |
+| “Essa rota ainda não existe no backend” | A tela chama uma rota que ninguém fez ainda (ex.: `/api/mecanicos`) | Combine com quem faz a rota; enquanto isso, teste na vitrine com os dados de exemplo |
+| `uvicorn: command not found` | O `.venv` não está ativo ou faltou o `pip install` | `source .venv/bin/activate` e `pip install -r requirements.txt` |
 | “Não encontrado.” | A rota ainda não existe no backend ou o endereço está errado | Confira em http://127.0.0.1:8000/api/docs |
 | `Each child in a list should have a unique "key"` | Faltou `key` no `map` | `key={item.id}` |
 | `... is not a function` ou `undefined` no import | Import com ou sem chaves errado | Arquivo com `export default`: `import X from`; sem: `import { X } from` |

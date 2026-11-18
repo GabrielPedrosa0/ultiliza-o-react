@@ -41,6 +41,30 @@ const SERVICOS = [
   ['buscaService.js', 'Integrante 4', 'pesquisar(q)', '/api/busca'],
   ['agendaService.js', 'Integrante 4', 'consultarAgenda(data)', '/api/agenda'],
   [
+    'mecanicosService.js',
+    'Integrante 4',
+    'listarMecanicos({ emExpediente }) · consultarMecanico(id) · cadastrarMecanico(dados) · atualizarMecanico(id, dados) · excluirMecanico(id)',
+    '/api/mecanicos (proposta)',
+  ],
+  [
+    'servicosCatalogoService.js',
+    'Integrante 1',
+    'listarServicosCatalogo({ busca }) · cadastrarServicoCatalogo(dados) · atualizarServicoCatalogo(id, dados) · excluirServicoCatalogo(id)',
+    '/api/servicos (proposta)',
+  ],
+  [
+    'pecasService.js',
+    'Integrante 1',
+    'listarPecas({ busca, estoqueBaixo }) · cadastrarPeca(dados) · atualizarPeca(id, dados) · excluirPeca(id) · registrarEntradaEstoque(id, dados)',
+    '/api/pecas (proposta)',
+  ],
+  [
+    'usuariosService.js',
+    'Integrante 6',
+    'listarUsuarios() · cadastrarUsuario(dados) · atualizarUsuario(id, dados) · excluirUsuario(id)',
+    '/api/usuarios (proposta)',
+  ],
+  [
     'clientesService.js',
     'Integrante 5',
     'listarClientes({ nome }) · consultarCliente(id) · cadastrarCliente(dados) · atualizarCliente(id, dados) · excluirCliente(id) · listarVeiculosDoCliente(id) · consultarHistoricoDoCliente(id)',

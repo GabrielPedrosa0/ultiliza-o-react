@@ -1,11 +1,15 @@
 // Menu lateral escuro do PC (Figma "Barras e menu"). Integrante 6.
 // Só aparece no PC (a partir de 900 px); no celular quem navega é a BarraAbas.
 //
-//   <MenuLateral usuario={{ nome: 'Ana', perfil: 'Recepção' }} nomeOficina="Oficina do Raimundo" />
+//   <MenuLateral usuario={{ nome: 'Ana', perfil: 'RECEPCAO' }} nomeOficina="Oficina do Raimundo" />
+//
+// Itens no Figma: Painel, Ordens de serviço, Clientes, Veículos, Mecânicos, Serviços, Peças e Usuários
+// (Usuários só aparece para o Gerente).
 import { NavLink } from 'react-router-dom'
 import Avatar from '../ui/Avatar'
 import Logo from './Logo'
-import { ITEM_CONFIGURACOES, ITENS_MENU } from './itensMenu'
+import { rotuloPerfil } from '../../constants/perfis'
+import { ITENS_MENU, itensDoPerfil } from './itensMenu'
 import './layout.css'
 
 function ItemMenu({ para, rotulo, icone: Icone, emBreve }) {
@@ -24,7 +28,7 @@ function ItemMenu({ para, rotulo, icone: Icone, emBreve }) {
 
 export default function MenuLateral({
   nomeOficina = 'Sua Oficina',
-  usuario = { nome: 'Usuário', perfil: 'Recepção' },
+  usuario = { nome: 'Usuário', perfil: 'RECEPCAO' },
   itens = ITENS_MENU,
   rodape,
 }) {
@@ -35,20 +39,19 @@ export default function MenuLateral({
       </div>
 
       <nav className="menu-lateral__nav">
-        {itens.map((item) => (
+        {itensDoPerfil(itens, usuario?.perfil).map((item) => (
           <ItemMenu key={item.para} {...item} />
         ))}
       </nav>
 
       <div className="menu-lateral__rodape">
-        <ItemMenu {...ITEM_CONFIGURACOES} />
         {rodape}
         {usuario && (
           <div className="menu-lateral__usuario">
             <Avatar nome={usuario.nome} tamanho={32} />
             <span className="menu-lateral__usuario-textos">
               <span className="menu-lateral__usuario-nome">{usuario.nome}</span>
-              <span className="menu-lateral__usuario-perfil">{usuario.perfil}</span>
+              <span className="menu-lateral__usuario-perfil">{rotuloPerfil(usuario.perfil)}</span>
             </span>
           </div>
         )}

@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 import Placa from '../ui/Placa'
 import SeloStatus from '../ui/SeloStatus'
-import { formatarMoedaCurta, formatarPrevisao } from '../../utils/formatadores'
+import Etiqueta from '../ui/Etiqueta'
+import { formatarMoedaCurta, formatarPrevisao, primeiroNome } from '../../utils/formatadores'
 import { resumoServico } from '../../utils/ordemServico'
 import { LISTA_STATUS } from '../../constants/statusOS'
 import './os.css'
@@ -96,8 +97,13 @@ export default function TabelaOS({ ordens = [], ordenavel = true, onClicar }) {
                 <Placa placa={os.placa} tamanho="texto" />
               </td>
               <td>{os.cliente_nome ?? '—'}</td>
-              <td className="tabela-os__servico">{resumoServico(os)}</td>
-              <td className={os.mecanico ? '' : 'texto-apoio'}>{os.mecanico ?? 'A definir'}</td>
+              <td className="tabela-os__servico">
+                {resumoServico(os)}
+                {os.garantia && <Etiqueta className="tabela-os__etiqueta">Garantia</Etiqueta>}
+              </td>
+              <td className={os.mecanico ? '' : 'texto-apoio'}>
+                {os.mecanico ? primeiroNome(os.mecanico) : 'A definir'}
+              </td>
               <td>
                 <SeloStatus status={os.status} />
               </td>

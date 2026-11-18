@@ -1,13 +1,14 @@
 // Clientes (guia 3.6). Integrante 5. Rotas em backend/routers/clientes.py.
 import { apiDelete, apiGet, apiPost, apiPut } from './api'
 
-// GET /api/clientes  ·  GET /api/clientes?nome=Marina
+// GET /api/clientes  ·  GET /api/clientes?nome=Marina  (o Figma busca também por CPF, telefone ou placa)
 export const listarClientes = ({ nome } = {}) => apiGet('/clientes', { nome })
 
 // GET /api/clientes/1  (vem com quantidade_veiculos)
 export const consultarCliente = (id) => apiGet(`/clientes/${id}`)
 
-// POST /api/clientes  { nome, telefone, email, cliente_desde }
+// POST /api/clientes  { nome, cpf_cnpj, telefone, email, cep, rua, numero, complemento, bairro, cidade, uf }
+// (CPF e endereço estão no Figma do MVP; o backend ainda não tem esses campos.)
 export const cadastrarCliente = (dados) => apiPost('/clientes', dados)
 
 // PUT /api/clientes/1

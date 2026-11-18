@@ -8,3 +8,16 @@
     gap: var(--espaco-6);
   }
 }
+
+/* PC largo: ordens recentes à esquerda, mecânicos em expediente à direita. */
+.painel__colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: inherit;
+  align-items: start;
+}
+@media (min-width: 1280px) {
+  .painel__colunas {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+}

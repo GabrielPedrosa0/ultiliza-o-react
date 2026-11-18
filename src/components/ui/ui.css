@@ -763,3 +763,221 @@ select.campo__controle {
   color: var(--texto-secundario);
   cursor: pointer;
 }
+
+/* -------------------------------------------------------------- Etiqueta */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--raio-p);
+  font: 600 12px/16px var(--fonte-texto);
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.etiqueta--destaque {
+  background: var(--fundo-primario-sutil);
+  color: var(--texto-primario);
+}
+.etiqueta--atencao {
+  background: var(--status-atencao-fundo);
+  color: var(--status-atencao-texto);
+}
+
+/* ----------------------------------------------------------- Interruptor */
+.interruptor {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  min-height: 48px;
+}
+.interruptor__textos {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.interruptor__rotulo {
+  font-weight: 500;
+  color: var(--texto-principal);
+  cursor: pointer;
+}
+.interruptor__ajuda {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--texto-apoio);
+}
+.interruptor__trilho {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 24px;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--raio-total);
+  background: var(--borda-forte);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.interruptor__trilho--ligado {
+  background: var(--fundo-primario);
+}
+.interruptor__botao {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--raio-total);
+  background: var(--fundo-superficie);
+  box-shadow: 0 1px 2px rgba(18, 20, 23, 0.2);
+  transition: transform 0.15s;
+}
+.interruptor__trilho--ligado .interruptor__botao {
+  transform: translateX(20px);
+}
+.interruptor--desabilitado {
+  opacity: 0.5;
+}
+.interruptor--desabilitado .interruptor__trilho {
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ Abas */
+.abas {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--raio-m);
+  background: var(--fundo-sutil);
+}
+.abas__aba {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 var(--espaco-4);
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font: 500 14px/20px var(--fonte-texto);
+  color: var(--texto-secundario);
+  cursor: pointer;
+}
+.abas__aba:hover {
+  color: var(--texto-principal);
+}
+.abas__aba--ativa,
+.abas__aba--ativa:hover {
+  background: var(--fundo-superficie);
+  box-shadow: var(--sombra-cartao);
+  color: var(--texto-principal);
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------- Tabela */
+.tabela__rolagem {
+  overflow-x: auto;
+  background: var(--fundo-superficie);
+  border: 1px solid var(--borda-padrao);
+  border-radius: var(--raio-g);
+  box-shadow: var(--sombra-cartao);
+}
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 20px;
+}
+.tabela th {
+  height: 44px;
+  padding: 0 var(--espaco-3);
+  background: var(--fundo-sutil);
+  font: 500 13px/16px var(--fonte-texto);
+  color: var(--texto-secundario);
+  text-align: left;
+  white-space: nowrap;
+}
+.tabela th:first-child,
+.tabela td:first-child {
+  padding-left: var(--espaco-4);
+}
+.tabela th:last-child,
+.tabela td:last-child {
+  padding-right: var(--espaco-4);
+}
+.tabela__ordenar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.tabela__ordenar:hover {
+  color: var(--texto-principal);
+}
+.tabela td {
+  height: 56px;
+  padding: var(--espaco-2) var(--espaco-3);
+  border-top: 1px solid var(--borda-padrao);
+  color: var(--texto-principal);
+  vertical-align: middle;
+}
+.tabela__linha--clicavel {
+  cursor: pointer;
+}
+.tabela__linha--clicavel:hover td {
+  background: var(--fundo-pagina);
+}
+.tabela__linha--clicavel:focus-visible {
+  outline: 2px solid var(--borda-foco);
+  outline-offset: -2px;
+}
+.tabela__direita {
+  text-align: right !important;
+  white-space: nowrap;
+}
+th.tabela__direita .tabela__ordenar {
+  justify-content: flex-end;
+}
+
+/* ---------------------------------------------------------- Grupo campos */
+.grupo-campos {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.grupo-campos__titulo {
+  padding: 0;
+  margin-bottom: var(--espaco-3);
+  font: 600 16px/24px var(--fonte-texto);
+  color: var(--texto-principal);
+}
+.grupo-campos__descricao {
+  margin: calc(var(--espaco-2) * -1) 0 var(--espaco-3);
+  font-size: 13px;
+  color: var(--texto-apoio);
+}
+.grupo-campos__grade {
+  display: grid;
+  grid-template-columns: repeat(var(--colunas, 2), minmax(0, 1fr));
+  gap: var(--espaco-4);
+}
+.grupo-campos__grade > .ocupa-2 {
+  grid-column: span 2;
+}
+.grupo-campos__grade > .ocupa-tudo {
+  grid-column: 1 / -1;
+}
+@media (max-width: 899px) {
+  .grupo-campos__grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .grupo-campos__grade > .ocupa-2 {
+    grid-column: auto;
+  }
+}

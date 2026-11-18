@@ -1,8 +1,10 @@
-// EXEMPLO DE COMPOSIÇÃO — "Detalhe da OS" (especificação 3.4) montado só com os componentes.
+// EXEMPLO DE COMPOSIÇÃO — "Detalhe da OS" (Figma "PC — Detalhe da OS" e "Celular — Detalhe da OS").
 // Integrantes 2 e 3: podem copiar para pages/OrdensServico/DetalheOrdemPage.jsx e ajustar.
+// À esquerda: Serviços e peças + Apontamentos. À direita: Ordem de serviço, Veículo, Cliente e o relato.
+// Com o backend real, campos que ele ainda não manda (chassi, CPF, garantia...) aparecem como “—”.
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Ban, Check, PackageSearch, Pencil, Phone, Plus, Printer, Send } from 'lucide-react'
+import { Navigate, useParams } from 'react-router-dom'
+import { Ban, Check, PackageSearch, Phone, Printer, Send } from 'lucide-react'
 import CabecalhoPagina from '../../components/layout/CabecalhoPagina'
 import RodapeAcoes from '../../components/layout/RodapeAcoes'
 import Aviso from '../../components/ui/Aviso'
@@ -14,16 +16,26 @@ import Modal, { ModalConfirmacao } from '../../components/ui/Modal'
 import Placa from '../../components/ui/Placa'
 import SeloStatus from '../../components/ui/SeloStatus'
 import ItensOS from '../../components/os/ItensOS'
+import Apontamentos from '../../components/os/Apontamentos'
+import { TIPOS_REGISTRAVEIS } from '../../constants/apontamentos'
 import { ACAO_PRINCIPAL, podeMudar, statusEncerrado } from '../../constants/statusOS'
 import { useAcao, useApi } from '../../hooks/useApi'
 import { adicionarItem, listarItens } from '../../services/itensOSService'
-import { consultarOrdem, mudarStatus } from '../../services/ordensServicoService'
+import {
+  consultarOrdem,
+  listarApontamentos,
+  listarOrdens,
+  mudarStatus,
+  registrarApontamento,
+} from '../../services/ordensServicoService'
 import { formatarKm, formatarMoeda, formatarMomento, linkTelefone, linkWhatsApp } from '../../utils/formatadores'
 import { totalDosItens } from '../../utils/ordemServico'
 import { obrigatorio, validar, validarNumeroNaoNegativo } from '../../utils/validadores'
 import './exemplos.css'
 
 const ITEM_VAZIO = { tipo: 'servico', descricao: '', codigo: '', quantidade: '1', valor_unitario: '' }
+const APONTAMENTO_VAZIO = { tipo: 'EXECUCAO', descricao: '' }
+const ou = (valor) => valor ?? '—'
 
 // Texto do orçamento para mandar pelo WhatsApp do próprio aparelho.
 function textoOrcamento(os, itens) {
@@ -35,12 +47,30 @@ function textoOrcamento(os, itens) {
   ].join('\n')
 }
 
+// "/exemplo/ordens/primeira": abre a primeira OS que existir (útil com o backend real,
+// onde os números das OS dependem de quantas vezes você rodou o dados_exemplo.py).
+function PrimeiraOS() {
+  const { dados, carregando, erro, recarregar } = useApi(() => listarOrdens())
+  if (carregando) return <EstadoCarregando texto="Procurando uma OS..." />
+  if (erro) return <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
+  if (!dados.length) return <EstadoErro titulo="Nenhuma OS cadastrada" mensagem="Rode scripts/dados_exemplo.py." />
+  return <Navigate to={`../${dados[0].id}`} relative="path" replace />
+}
+
 export default function ExemploDetalheOS() {
   const { id } = useParams()
+  return id === 'primeira' ? <PrimeiraOS /> : <DetalheOS id={id} />
+}
+
+function DetalheOS({ id }) {
   const ordem = useApi(() => consultarOrdem(id), [id])
   const itens = useApi(() => listarItens(id), [id])
   const acaoStatus = useAcao(mudarStatus)
   const acaoItem = useAcao(adicionarItem)
+  const apontamentos = useApi(() => listarApontamentos(id), [id])
+  const acaoApontamento = useAcao(registrarApontamento)
+  const [modalApontamento, setModalApontamento] = useState(false)
+  const [apontamento, setApontamento] = useState(APONTAMENTO_VAZIO)
 
   const [modalItem, setModalItem] = useState(false)
   const [item, setItem] = useState(ITEM_VAZIO)
@@ -87,6 +117,23 @@ export default function ExemploDetalheOS() {
 
   const mudarItem = (campo) => (e) => setItem({ ...item, [campo]: e.target.value })
 
+  function abrirItem(tipo) {
+    setItem({ ...ITEM_VAZIO, tipo })
+    setErrosItem({})
+    setModalItem(true)
+  }
+
+  async function salvarApontamento() {
+    if (!apontamento.descricao.trim()) return
+    if (await acaoApontamento.executar(os.id, { ...apontamento, descricao: apontamento.descricao.trim() })) {
+      setModalApontamento(false)
+      setApontamento(APONTAMENTO_VAZIO)
+      apontamentos.recarregar()
+    }
+  }
+
+  const enviarOrcamento = () => window.open(linkWhatsApp(os.cliente_telefone, textoOrcamento(os, lista)), '_blank')
+
   return (
     <>
       <CabecalhoPagina
@@ -97,10 +144,15 @@ export default function ExemploDetalheOS() {
             <Botao variante="secundario" icone={Printer} onClick={() => window.print()}>
               Imprimir
             </Botao>
-            {!somenteLeitura && (
-              <Botao variante="secundario" icone={Pencil}>
-                Editar dados
-              </Botao>
+            {acao && (
+              <>
+                <Botao variante="secundario" icone={Send} onClick={enviarOrcamento}>
+                  Enviar orçamento
+                </Botao>
+                <Botao icone={Check} carregando={acaoStatus.executando} onClick={() => avancar(acao.proximo)}>
+                  {acao.rotulo}
+                </Botao>
+              </>
             )}
           </>
         }
@@ -110,15 +162,6 @@ export default function ExemploDetalheOS() {
         <div className="detalhe-os__topo">
           <SeloStatus status={os.status} />
           <Placa placa={os.placa} tamanho="grande" />
-        </div>
-        <div>
-          <h2 className="t-h3">{os.veiculo}</h2>
-          <p className="texto-secundario detalhe-os__cliente">
-            {os.cliente_nome} ·{' '}
-            <a href={linkTelefone(os.cliente_telefone)}>
-              <Phone size={14} aria-hidden="true" /> {os.cliente_telefone}
-            </a>
-          </p>
         </div>
 
         {acaoStatus.erro && (
@@ -130,24 +173,6 @@ export default function ExemploDetalheOS() {
         <div className="detalhe-os__grade">
           <div className="pilha">
             <Cartao>
-              <GradeDados>
-                <Dado rotulo="Entrada">{formatarMomento(os.data_abertura)}</Dado>
-                <Dado rotulo="Previsão">{os.data_previsao ? formatarMomento(os.data_previsao) : 'Sem data'}</Dado>
-                <Dado rotulo="Quilometragem">{formatarKm(os.quilometragem)}</Dado>
-                <Dado rotulo="Mecânico">{os.mecanico ?? 'A definir'}</Dado>
-              </GradeDados>
-            </Cartao>
-
-            <Cartao
-              titulo="Serviços e peças"
-              acao={
-                !somenteLeitura && (
-                  <Botao variante="fantasma" tamanho="pequeno" icone={Plus} onClick={() => setModalItem(true)}>
-                    Adicionar
-                  </Botao>
-                )
-              }
-            >
               {itens.carregando ? (
                 <EstadoCarregando />
               ) : itens.erro ? (
@@ -157,16 +182,68 @@ export default function ExemploDetalheOS() {
                   onTentarDeNovo={itens.recarregar}
                 />
               ) : (
-                <ItensOS itens={lista} somenteLeitura={somenteLeitura} onRemover={() => {}} />
+                <ItensOS itens={lista} somenteLeitura={somenteLeitura} onAdicionar={abrirItem} onRemover={() => {}} />
+              )}
+            </Cartao>
+
+            <Cartao>
+              {apontamentos.carregando ? (
+                <EstadoCarregando />
+              ) : apontamentos.erro ? (
+                <EstadoErro
+                  titulo="Não foi possível carregar os apontamentos"
+                  mensagem={apontamentos.erro.message}
+                  onTentarDeNovo={apontamentos.recarregar}
+                />
+              ) : (
+                <Apontamentos
+                  apontamentos={apontamentos.dados}
+                  somenteLeitura={somenteLeitura}
+                  onRegistrar={() => setModalApontamento(true)}
+                />
               )}
             </Cartao>
           </div>
 
           <div className="pilha">
-            <Cartao titulo="Observações">
-              <Dado rotulo="Problema relatado">{os.problema_relatado}</Dado>
-              <Dado rotulo="Anotações internas">{os.observacoes ?? 'Nenhuma'}</Dado>
+            <Cartao titulo="Ordem de serviço">
+              <GradeDados>
+                <Dado rotulo="Abertura">{formatarMomento(os.data_abertura)}</Dado>
+                <Dado rotulo="Previsão">{os.data_previsao ? formatarMomento(os.data_previsao) : 'Sem data'}</Dado>
+                <Dado rotulo="Conclusão">{os.data_conclusao ? formatarMomento(os.data_conclusao) : '—'}</Dado>
+                <Dado rotulo="Orçamento enviado">
+                  {os.data_orcamento_enviado ? formatarMomento(os.data_orcamento_enviado) : '—'}
+                </Dado>
+              </GradeDados>
+              <Dado rotulo="Mecânico">
+                {os.mecanico ? [os.mecanico, os.mecanico_expediente].filter(Boolean).join(' · ') : 'A definir'}
+              </Dado>
+              <Dado rotulo="Garantia">{os.garantia ? 'Sim' : 'Não'}</Dado>
             </Cartao>
+
+            <Cartao titulo="Veículo">
+              <Dado rotulo="Modelo">{[os.veiculo, os.ano].filter(Boolean).join(' · ')}</Dado>
+              <Dado rotulo="Chassi">
+                <span className="detalhe-os__chassi">{ou(os.chassi)}</span>
+              </Dado>
+              <Dado rotulo="Km na entrada">{formatarKm(os.quilometragem)}</Dado>
+            </Cartao>
+
+            <Cartao titulo="Cliente">
+              <Dado rotulo="Nome">{os.cliente_nome}</Dado>
+              <Dado rotulo="Telefone">
+                <a className="detalhe-os__telefone" href={linkTelefone(os.cliente_telefone)}>
+                  <Phone size={14} aria-hidden="true" /> {os.cliente_telefone}
+                </a>
+              </Dado>
+              <Dado rotulo="CPF">{ou(os.cliente_cpf_cnpj)}</Dado>
+            </Cartao>
+
+            <Cartao>
+              <Dado rotulo="Problema relatado">{os.problema_relatado}</Dado>
+              <Dado rotulo="Observações">{os.observacoes ?? 'Nenhuma'}</Dado>
+            </Cartao>
+
             {!somenteLeitura && (
               <Cartao titulo="Outras ações">
                 {podeMudar(os.status, 'AGUARDANDO_PECA') && (
@@ -185,13 +262,10 @@ export default function ExemploDetalheOS() {
         </div>
 
         {/* Botão principal muda conforme o status; Entregue e Cancelado não têm. */}
+        {/* No celular os dois botões ficam presos no rodapé; no PC estão no cabeçalho. */}
         {acao && (
-          <RodapeAcoes>
-            <Botao
-              variante="secundario"
-              icone={Send}
-              onClick={() => window.open(linkWhatsApp(os.cliente_telefone, textoOrcamento(os, lista)), '_blank')}
-            >
+          <RodapeAcoes soCelular>
+            <Botao variante="secundario" icone={Send} onClick={enviarOrcamento}>
               Enviar orçamento
             </Botao>
             <Botao icone={Check} carregando={acaoStatus.executando} onClick={() => avancar(acao.proximo)}>
@@ -204,7 +278,7 @@ export default function ExemploDetalheOS() {
       <Modal
         aberto={modalItem}
         onFechar={() => setModalItem(false)}
-        titulo="Adicionar item"
+        titulo={item.tipo === 'servico' ? 'Adicionar serviço' : 'Adicionar peça'}
         rodape={
           <>
             <Botao variante="secundario" onClick={() => setModalItem(false)}>
@@ -217,12 +291,16 @@ export default function ExemploDetalheOS() {
         }
       >
         {acaoItem.erro && <Aviso tom="perigo">{acaoItem.erro.message}</Aviso>}
-        <Campo rotulo="Tipo" tipo="select" value={item.tipo} onChange={mudarItem('tipo')}>
-          <option value="servico">Mão de obra</option>
-          <option value="peca">Peça</option>
-        </Campo>
         <Campo rotulo="Descrição" value={item.descricao} onChange={mudarItem('descricao')} erro={errosItem.descricao} />
-        <Campo rotulo="Código" opcional value={item.codigo} onChange={mudarItem('codigo')} placeholder="FLT-OL-0098" />
+        {item.tipo === 'peca' && (
+          <Campo
+            rotulo="Código"
+            opcional
+            value={item.codigo}
+            onChange={mudarItem('codigo')}
+            placeholder="FLT-OL-0098"
+          />
+        )}
         <div className="detalhe-os__duas">
           <Campo
             rotulo="Quantidade"
@@ -241,6 +319,44 @@ export default function ExemploDetalheOS() {
             erro={errosItem.valor_unitario}
           />
         </div>
+      </Modal>
+
+      <Modal
+        aberto={modalApontamento}
+        onFechar={() => setModalApontamento(false)}
+        titulo="Registrar apontamento"
+        rodape={
+          <>
+            <Botao variante="secundario" onClick={() => setModalApontamento(false)}>
+              Cancelar
+            </Botao>
+            <Botao carregando={acaoApontamento.executando} onClick={salvarApontamento}>
+              Registrar
+            </Botao>
+          </>
+        }
+      >
+        {acaoApontamento.erro && <Aviso tom="perigo">{acaoApontamento.erro.message}</Aviso>}
+        <Campo
+          rotulo="Tipo"
+          tipo="select"
+          value={apontamento.tipo}
+          onChange={(e) => setApontamento({ ...apontamento, tipo: e.target.value })}
+        >
+          {TIPOS_REGISTRAVEIS.map((t) => (
+            <option key={t.valor} value={t.valor}>
+              {t.rotulo}
+            </option>
+          ))}
+        </Campo>
+        <Campo
+          rotulo="O que foi feito"
+          tipo="textarea"
+          maxLength={500}
+          value={apontamento.descricao}
+          onChange={(e) => setApontamento({ ...apontamento, descricao: e.target.value })}
+          placeholder="Óleo e filtros trocados; testando vazamentos."
+        />
       </Modal>
 
       <ModalConfirmacao

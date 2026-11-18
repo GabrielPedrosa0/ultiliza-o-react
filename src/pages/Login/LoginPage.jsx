@@ -10,7 +10,7 @@ export default function LoginPage() {
     <EmConstrucao
       titulo="Entrar"
       responsavel="Integrante 5"
-      descricao="PC: painel escuro com a frase da marca e o formulário à direita. Celular: só o formulário."
+      descricao="PC: painel escuro com a frase “Ordens de serviço, clientes, mecânicos e peças em um só lugar.” e o formulário à direita. Celular: só o formulário. Ajuda: “Use o e-mail e a senha cadastrados pelo gerente.” e o link Esqueci minha senha."
     />
   )
 }

@@ -24,6 +24,8 @@ export class ErroApi extends Error {
 // O FastAPI manda o erro em `detail`: texto (nossos HTTPException) ou lista (validação 422 do Pydantic).
 function mensagemDoErro(corpo, status) {
   const detalhe = corpo?.detail
+  // "Not Found" é a resposta padrão do FastAPI para um endereço que não tem rota.
+  if (status === 404 && detalhe === 'Not Found') return 'Essa rota ainda não existe no backend.'
   if (typeof detalhe === 'string') return detalhe
   if (Array.isArray(detalhe) && detalhe.length > 0) {
     const primeiro = detalhe[0]
@@ -64,15 +66,28 @@ function cabecalhos(extra = {}) {
   }
 }
 
+const MENSAGEM_DESLIGADO = 'Sem conexão com o servidor. Confira se o backend está ligado e a internet funcionando.'
+
+function lerJson(texto) {
+  try {
+    return JSON.parse(texto)
+  } catch {
+    return null
+  }
+}
+
 async function requisitar(caminho, opcoes = {}) {
   let resposta
   try {
     resposta = await fetch(`${API_BASE}${caminho}`, { ...opcoes, headers: cabecalhos(opcoes.headers) })
   } catch {
-    throw new ErroApi('Sem conexão com o servidor. Confira a internet e tente de novo.', 0)
+    throw new ErroApi(MENSAGEM_DESLIGADO, 0)
   }
   if (!resposta.ok) {
-    const corpo = await resposta.json().catch(() => null)
+    const texto = await resposta.text().catch(() => '')
+    // Erro 5xx sem corpo nenhum = o repasse do Vite não achou o backend (ele está desligado).
+    if (!texto && resposta.status >= 500) throw new ErroApi(MENSAGEM_DESLIGADO, 0)
+    const corpo = lerJson(texto)
     throw new ErroApi(mensagemDoErro(corpo, resposta.status), resposta.status, corpo?.detail)
   }
   return resposta

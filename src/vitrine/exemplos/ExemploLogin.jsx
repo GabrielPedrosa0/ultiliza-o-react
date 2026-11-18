@@ -32,8 +32,10 @@ export default function ExemploLogin() {
       <aside className="login__marca so-pc">
         <Logo />
         <div>
-          <p className="login__frase">Ordens de serviço, clientes e estoque em um só lugar.</p>
-          <p className="login__apoio">Acompanhe cada veículo da entrada à entrega.</p>
+          <p className="login__frase">Ordens de serviço, clientes, mecânicos e peças em um só lugar.</p>
+          <p className="login__apoio">
+            Acompanhe cada veículo da entrada à entrega, com tudo o que foi feito registrado.
+          </p>
         </div>
       </aside>
 
@@ -44,7 +46,7 @@ export default function ExemploLogin() {
           </div>
           <div>
             <h1 className="t-h2">Entrar</h1>
-            <p className="texto-secundario">Use o acesso fornecido pela oficina.</p>
+            <p className="texto-secundario">Use o e-mail e a senha cadastrados pelo gerente.</p>
           </div>
 
           {login.erro && <Aviso tom="perigo">{login.erro.message}</Aviso>}

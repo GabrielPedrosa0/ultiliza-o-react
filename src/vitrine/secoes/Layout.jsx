@@ -71,11 +71,13 @@ export default function ListaClientesPage() {
           titulo="routes/AppRoutes.jsx + components/layout/itensMenu.js"
           codigo={`
 // 1. routes/AppRoutes.jsx, dentro de <Route element={<LayoutPrincipal />}>:
-<Route path="estoque" element={<EstoquePage />} />
+<Route path="agenda" element={<AgendaPage />} />
 
 // 2. Se aparece no menu, em components/layout/itensMenu.js:
-{ para: '/estoque', rotulo: 'Estoque', icone: Package },        // ITENS_MENU (PC)
-// e, se couber, em ABAS_CELULAR (máx. 5 abas; o resto vai para "Mais").`}
+{ para: '/agenda', rotulo: 'Agenda', icone: CalendarDays },          // ITENS_MENU (PC)
+{ para: '/agenda', rotulo: 'Agenda', descricao: 'OS por dia', icone: CalendarDays },  // ITENS_MAIS (celular)
+// Só para um perfil:  { ..., perfis: ['GERENTE'] }
+// ABAS_CELULAR tem no máximo 5 abas; o resto vai para "Mais".`}
         />
       </Bloco>
 
@@ -100,7 +102,7 @@ const TELAS = [
   [
     'Painel / Início',
     '/',
-    'PainelPage, tela real do projeto ligada ao backend (modelo de referência).',
+    'PainelPage, tela real do projeto ligada ao backend (modelo de referência), com “Mecânicos em expediente”.',
     'pages/Painel/PainelPage.jsx',
   ],
   [
@@ -111,9 +113,33 @@ const TELAS = [
   ],
   [
     'Detalhe da OS',
-    '/exemplo/ordens/1042',
-    'Exemplo de composição: dados, itens, modal de item, cancelar com motivo, botão que muda com o status.',
+    '/exemplo/ordens/primeira',
+    'Exemplo de composição do Figma: Serviços e Peças com subtotais, Apontamentos, e à direita Ordem de serviço, Veículo e Cliente. Abre a primeira OS que existir (com o backend real também).',
     'vitrine/exemplos/ExemploDetalheOS.jsx',
+  ],
+  [
+    'Mecânicos',
+    '/exemplo/mecanicos',
+    'Exemplo de composição: Tabela no PC, lista com avatar no celular, expediente e OS em serviço.',
+    'vitrine/exemplos/ExemploMecanicos.jsx',
+  ],
+  [
+    'Serviços e peças',
+    '/exemplo/pecas',
+    'Exemplo de composição: duas telas no PC (Serviços e Peças) e abas no celular; busca e etiqueta de estoque baixo.',
+    'vitrine/exemplos/ExemploServicosPecas.jsx',
+  ],
+  [
+    'Novo cliente',
+    '/exemplo/clientes/novo',
+    'Exemplo de composição: Dados pessoais e Endereço com GrupoCampos, CPF/CNPJ e CEP validados. Clique em Salvar com o nome vazio.',
+    'vitrine/exemplos/ExemploNovoCliente.jsx',
+  ],
+  [
+    'Veículos',
+    '/veiculos',
+    'A tela feita no tutorial do guia (seções 10 e 11): lista com busca por placa e o botão Novo veículo.',
+    'vitrine/guia/TutorialListaVeiculos.jsx',
   ],
   [
     'Login',
@@ -121,12 +147,17 @@ const TELAS = [
     'Exemplo de composição: validação, erro do backend e authService. Teste com recepcao@oficina.com.br / oficina123.',
     'vitrine/exemplos/ExemploLogin.jsx',
   ],
-  ['Mais (celular)', '/mais', 'Tela real do projeto: o que não cabe nas abas.', 'pages/Mais/MaisPage.jsx'],
+  [
+    'Mais (celular)',
+    '/mais',
+    'Tela real do projeto: Mecânicos, Serviços, Peças e Usuários, como no Figma.',
+    'pages/Mais/MaisPage.jsx',
+  ],
   [
     'Tela em construção',
-    '/clientes',
+    '/usuarios',
     'Como estão as telas que cada integrante ainda vai fazer.',
-    'pages/Clientes/ListaClientesPage.jsx',
+    'pages/Usuarios/UsuariosPage.jsx',
   ],
 ]
 
@@ -135,10 +166,13 @@ export function SecTelas() {
     <PaginaSecao
       grupo="Layout"
       titulo="Telas completas"
-      descricao="Telas inteiras montadas só com os componentes, nas duas larguras. As de exemplo (Lista, Detalhe e Login) mostram como os integrantes podem montar as suas: copie, troque os caminhos e ajuste."
+      descricao="Telas inteiras montadas só com os componentes, nas duas larguras, seguindo o Figma do MVP. As de exemplo mostram como os integrantes podem montar as suas: copie, troque os caminhos (tire o /exemplo) e ajuste."
       arquivos={[
         'vitrine/exemplos/ExemploListaOrdens.jsx',
         'vitrine/exemplos/ExemploDetalheOS.jsx',
+        'vitrine/exemplos/ExemploMecanicos.jsx',
+        'vitrine/exemplos/ExemploServicosPecas.jsx',
+        'vitrine/exemplos/ExemploNovoCliente.jsx',
         'vitrine/exemplos/ExemploLogin.jsx',
         'vitrine/exemplos/exemplos.css',
         'pages/Painel/PainelPage.jsx',

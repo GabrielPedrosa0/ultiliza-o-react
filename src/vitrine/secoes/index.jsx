@@ -19,6 +19,15 @@ import {
   SecSelo,
 } from './ComponentesUI'
 import { SecCartaoOS, SecItensOS, SecTabelaOS } from './ComponentesOS'
+import {
+  SecAbas,
+  SecApontamentos,
+  SecEtiqueta,
+  SecGrupoCampos,
+  SecInterruptor,
+  SecLinhaVeiculo,
+  SecTabela,
+} from './ComponentesMVP'
 import { SecLayout, SecTelas } from './Layout'
 import { SecApi, SecHooks, SecTeste } from './Backend'
 import { SecFormatadores, SecStatus, SecValidadores } from './Utilitarios'
@@ -40,12 +49,48 @@ export const SECOES = [
   { id: 'icones', grupo: 'Fundações', titulo: 'Ícones', Componente: Icones },
   { id: 'botao', grupo: 'Componentes', titulo: 'Botão', Componente: SecBotao },
   { id: 'campo', grupo: 'Componentes', titulo: 'Campo', Componente: SecCampo },
+  {
+    id: 'grupo-campos',
+    grupo: 'Componentes',
+    titulo: 'Grupo de campos',
+    Componente: SecGrupoCampos,
+    palavras: 'formulario endereco cliente',
+  },
+  {
+    id: 'interruptor',
+    grupo: 'Componentes',
+    titulo: 'Interruptor',
+    Componente: SecInterruptor,
+    palavras: 'switch garantia',
+  },
   { id: 'selo', grupo: 'Componentes', titulo: 'Selo de status', Componente: SecSelo },
+  {
+    id: 'etiqueta',
+    grupo: 'Componentes',
+    titulo: 'Etiqueta',
+    Componente: SecEtiqueta,
+    palavras: 'garantia estoque baixo',
+  },
   { id: 'placa-avatar', grupo: 'Componentes', titulo: 'Placa e Avatar', Componente: SecPlacaAvatar },
   { id: 'indicador', grupo: 'Componentes', titulo: 'Indicador', Componente: SecIndicador },
   { id: 'filtros', grupo: 'Componentes', titulo: 'Filtros', Componente: SecFiltros },
+  { id: 'abas', grupo: 'Componentes', titulo: 'Abas', Componente: SecAbas, palavras: 'servicos pecas tabs' },
+  {
+    id: 'tabela',
+    grupo: 'Componentes',
+    titulo: 'Tabela',
+    Componente: SecTabela,
+    palavras: 'mecanicos pecas usuarios lista',
+  },
   { id: 'cartao', grupo: 'Componentes', titulo: 'Cartão e Dado', Componente: SecCartao },
   { id: 'item-lista', grupo: 'Componentes', titulo: 'Item de lista', Componente: SecItemLista },
+  {
+    id: 'linha-veiculo',
+    grupo: 'Componentes',
+    titulo: 'Linha de veículo',
+    Componente: SecLinhaVeiculo,
+    palavras: 'placa carro',
+  },
   { id: 'busca', grupo: 'Componentes', titulo: 'Barra de busca', Componente: SecBusca },
   { id: 'aviso', grupo: 'Componentes', titulo: 'Aviso', Componente: SecAviso },
   { id: 'estados', grupo: 'Componentes', titulo: 'Carregando, vazio e erro', Componente: SecEstados },
@@ -54,6 +99,13 @@ export const SECOES = [
   { id: 'cartao-os', grupo: 'Ordem de serviço', titulo: 'Cartão da OS', Componente: SecCartaoOS },
   { id: 'tabela-os', grupo: 'Ordem de serviço', titulo: 'Tabela de OS', Componente: SecTabelaOS },
   { id: 'itens-os', grupo: 'Ordem de serviço', titulo: 'Serviços e peças', Componente: SecItensOS },
+  {
+    id: 'apontamentos',
+    grupo: 'Ordem de serviço',
+    titulo: 'Apontamentos',
+    Componente: SecApontamentos,
+    palavras: 'linha do tempo historico',
+  },
   { id: 'layout', grupo: 'Layout', titulo: 'Moldura do app', Componente: SecLayout },
   { id: 'telas', grupo: 'Layout', titulo: 'Telas completas', Componente: SecTelas },
   { id: 'api', grupo: 'Backend', titulo: 'Conexão e services', Componente: SecApi },
