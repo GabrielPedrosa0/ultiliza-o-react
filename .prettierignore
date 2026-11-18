@@ -1,0 +1,3 @@
+# O guia é texto escrito à mão (tabelas e comentários alinhados): o Prettier não deve mexer nele.
+*.md
+dist

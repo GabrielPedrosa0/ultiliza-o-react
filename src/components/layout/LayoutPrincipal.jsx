@@ -1,0 +1,30 @@
+// Moldura de todas as telas internas (todas menos Login). Integrante 6.
+// PC: menu lateral escuro + barra superior + conteúdo. Celular: conteúdo + barra de abas.
+// As telas aparecem no <Outlet /> (ver routes/AppRoutes.jsx).
+import { Outlet, useNavigate } from 'react-router-dom'
+import { usuarioSalvo } from '../../services/authService'
+import BarraAbas from './BarraAbas'
+import BarraSuperior from './BarraSuperior'
+import MenuLateral from './MenuLateral'
+import './layout.css'
+
+const PERFIS = { recepcao: 'Recepção', mecanico: 'Mecânico', gerente: 'Gerente' }
+
+export default function LayoutPrincipal({ children }) {
+  const navigate = useNavigate()
+  const usuario = usuarioSalvo()
+  const usuarioMenu = usuario
+    ? { nome: usuario.nome, perfil: PERFIS[usuario.perfil?.toLowerCase()] ?? usuario.perfil }
+    : { nome: 'Usuário', perfil: 'Recepção' }
+
+  return (
+    <div className="layout">
+      <MenuLateral usuario={usuarioMenu} />
+      <div className="layout__principal">
+        <BarraSuperior onBuscar={(texto) => navigate(`/ordens?busca=${encodeURIComponent(texto)}`)} />
+        <main className="layout__conteudo">{children ?? <Outlet />}</main>
+      </div>
+      <BarraAbas />
+    </div>
+  )
+}

@@ -1,0 +1,90 @@
+/* Estilos só das telas de exemplo (Login e Detalhe da OS).
+   Ao copiar uma tela, leve junto o bloco dela para o .css da página. */
+
+/* ------------------------------------------------------------ Login */
+.login {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 100svh;
+  background: var(--fundo-superficie);
+}
+.login__marca {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--espaco-10);
+  background: var(--fundo-invertido);
+}
+.login__frase {
+  max-width: 480px;
+  margin: 0 0 var(--espaco-3);
+  font: 600 48px/52px var(--fonte-titulo);
+  color: var(--texto-invertido);
+}
+.login__apoio {
+  margin: 0;
+  font-size: 16px;
+  color: var(--texto-invertido-apoio);
+}
+.login__area {
+  display: grid;
+  place-items: center;
+  padding: var(--espaco-8) var(--margem-pagina);
+}
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+  width: 100%;
+  max-width: 380px;
+}
+.login__form p {
+  margin: var(--espaco-1) 0 0;
+}
+@media (max-width: 899px) {
+  .login {
+    display: block;
+  }
+  .login__area {
+    place-items: start stretch;
+    padding-top: var(--espaco-10);
+  }
+}
+
+/* --------------------------------------------------- Detalhe da OS */
+.detalhe-os {
+  gap: var(--espaco-4);
+  max-width: 1120px;
+}
+.detalhe-os__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+}
+.detalhe-os__cliente {
+  margin: var(--espaco-1) 0 0;
+}
+.detalhe-os__cliente a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--texto-primario);
+  font-weight: 500;
+}
+.detalhe-os__grade {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--espaco-4);
+  align-items: start;
+}
+.detalhe-os__duas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-3);
+}
+@media (max-width: 899px) {
+  .detalhe-os__grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

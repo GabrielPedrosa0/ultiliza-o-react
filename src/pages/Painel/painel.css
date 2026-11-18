@@ -1,0 +1,10 @@
+/* Painel (PC) e Início (celular). Integrante 4.
+   Quase tudo vem dos componentes; aqui ficam só os ajustes desta tela. */
+.painel {
+  gap: var(--espaco-8);
+}
+@media (max-width: 899px) {
+  .painel {
+    gap: var(--espaco-6);
+  }
+}
