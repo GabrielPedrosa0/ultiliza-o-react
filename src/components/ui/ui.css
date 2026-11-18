@@ -583,6 +583,92 @@ select.campo__controle {
   color: var(--texto-secundario);
 }
 
+/* Esqueletos do EstadoCarregando: imitam o formato do conteúdo final. */
+.esqueleto--circulo {
+  border-radius: var(--raio-total);
+  flex-shrink: 0;
+}
+.esqueleto--pilula {
+  border-radius: var(--raio-total);
+}
+.carregando .esqueleto {
+  display: block;
+  max-width: 100%;
+}
+.carregando__linha-entre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+}
+.carregando-lista {
+  overflow: hidden;
+  background: var(--fundo-superficie);
+  border: 1px solid var(--borda-padrao);
+  border-radius: var(--raio-g);
+  box-shadow: var(--sombra-cartao);
+}
+.carregando-lista__item {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  min-height: 64px;
+  padding: var(--espaco-3) var(--espaco-4);
+  border-bottom: 1px solid var(--borda-padrao);
+}
+.carregando-lista__item:last-child {
+  border-bottom: 0;
+}
+.carregando-lista__textos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  min-width: 0;
+}
+.carregando-cartoes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+.carregando-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  padding: var(--espaco-4);
+  background: var(--fundo-superficie);
+  border: 1px solid var(--borda-padrao);
+  border-radius: var(--raio-g);
+  box-shadow: var(--sombra-cartao);
+}
+.carregando-tabela {
+  overflow: hidden;
+  background: var(--fundo-superficie);
+  border: 1px solid var(--borda-padrao);
+  border-radius: var(--raio-g);
+  box-shadow: var(--sombra-cartao);
+}
+.carregando-tabela__cabecalho,
+.carregando-tabela__linha {
+  display: grid;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding: 0 var(--espaco-4);
+}
+.carregando-tabela__cabecalho {
+  height: 44px;
+  background: var(--fundo-sutil);
+}
+.carregando-tabela__linha {
+  height: 56px;
+  border-top: 1px solid var(--borda-padrao);
+}
+.carregando-bloco {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
 .em-construcao {
   display: flex;
   flex-direction: column;

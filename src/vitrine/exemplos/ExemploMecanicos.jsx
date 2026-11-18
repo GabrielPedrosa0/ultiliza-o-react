@@ -48,7 +48,8 @@ export default function ExemploMecanicos() {
   const editar = (m) => navigate(`/mecanicos/${m.id}/editar`)
 
   let conteudo
-  if (carregando) conteudo = <EstadoCarregando texto="Carregando equipe..." />
+  if (carregando)
+    conteudo = <EstadoCarregando formato="tabela" formatoCelular="lista" linhas={4} texto="Carregando equipe..." />
   else if (erro) conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   else if (dados.length === 0)
     conteudo = <EstadoVazio icone={HardHat} titulo="Nenhum mecânico cadastrado" texto="Cadastre a equipe da oficina." />

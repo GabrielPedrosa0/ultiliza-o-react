@@ -51,7 +51,7 @@ function textoOrcamento(os, itens) {
 // onde os números das OS dependem de quantas vezes você rodou o dados_exemplo.py).
 function PrimeiraOS() {
   const { dados, carregando, erro, recarregar } = useApi(() => listarOrdens())
-  if (carregando) return <EstadoCarregando texto="Procurando uma OS..." />
+  if (carregando) return <EstadoCarregando formato="bloco" texto="Procurando uma OS..." />
   if (erro) return <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   if (!dados.length) return <EstadoErro titulo="Nenhuma OS cadastrada" mensagem="Rode scripts/dados_exemplo.py." />
   return <Navigate to={`../${dados[0].id}`} relative="path" replace />
@@ -78,7 +78,7 @@ function DetalheOS({ id }) {
   const [cancelar, setCancelar] = useState(false)
   const [motivo, setMotivo] = useState('')
 
-  if (ordem.carregando) return <EstadoCarregando texto="Carregando a OS..." />
+  if (ordem.carregando) return <EstadoCarregando formato="bloco" linhas={5} texto="Carregando a OS..." />
   if (ordem.erro) return <EstadoErro mensagem={ordem.erro.message} onTentarDeNovo={ordem.recarregar} />
 
   const os = ordem.dados
@@ -174,7 +174,7 @@ function DetalheOS({ id }) {
           <div className="pilha">
             <Cartao>
               {itens.carregando ? (
-                <EstadoCarregando />
+                <EstadoCarregando formato="bloco" />
               ) : itens.erro ? (
                 <EstadoErro
                   titulo="Não foi possível carregar os itens"
@@ -188,7 +188,7 @@ function DetalheOS({ id }) {
 
             <Cartao>
               {apontamentos.carregando ? (
-                <EstadoCarregando />
+                <EstadoCarregando formato="bloco" />
               ) : apontamentos.erro ? (
                 <EstadoErro
                   titulo="Não foi possível carregar os apontamentos"

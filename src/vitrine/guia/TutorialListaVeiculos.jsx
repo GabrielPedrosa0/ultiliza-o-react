@@ -23,7 +23,7 @@ export default function ListaVeiculosPage() {
   // 3. O que mostrar em cada situação
   let conteudo
   if (carregando) {
-    conteudo = <EstadoCarregando texto="Carregando veículos..." />
+    conteudo = <EstadoCarregando formato="lista" texto="Carregando veículos..." />
   } else if (erro) {
     conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   } else if (dados.length === 0) {

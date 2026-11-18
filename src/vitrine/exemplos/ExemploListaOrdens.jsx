@@ -74,7 +74,10 @@ export default function ExemploListaOrdens() {
   }
 
   let lista
-  if (carregando) lista = <EstadoCarregando texto="Carregando ordens..." />
+  if (carregando)
+    lista = (
+      <EstadoCarregando formato="tabela" formatoCelular="cartoes" linhas={5} colunas={5} texto="Carregando ordens..." />
+    )
   else if (erro) lista = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   else if (dados.length === 0)
     lista = (

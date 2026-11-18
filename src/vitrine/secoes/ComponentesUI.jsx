@@ -637,7 +637,7 @@ export function SecEstados() {
     <PaginaSecao
       grupo="Componentes"
       titulo="Estados: carregando, vazio e erro"
-      descricao="Toda lista precisa dos três (especificação 2.4). O vazio tem o botão de criar; o erro tem “Tentar de novo”."
+      descricao="Toda lista precisa dos três (especificação 2.4). O carregando é um esqueleto com o formato do que vai aparecer; o vazio tem o botão de criar; o erro tem “Tentar de novo”."
       arquivos={[`${UI}Estados.jsx`, CSS]}
     >
       <Exemplo
@@ -647,7 +647,7 @@ import { EstadoCarregando, EstadoErro, EstadoVazio } from '../../components/ui/E
 
 const { dados, carregando, erro, recarregar } = useApi(() => listarClientes({ nome: busca }), [busca])
 
-if (carregando) return <EstadoCarregando />
+if (carregando) return <EstadoCarregando formato="lista" />
 if (erro) return <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
 if (dados.length === 0)
   return <EstadoVazio icone={Users} titulo="Nenhum cliente encontrado" acao={<Botao icone={Plus}>Novo cliente</Botao>} />
@@ -655,9 +655,7 @@ if (dados.length === 0)
 return dados.map(...)`}
       >
         <div className="vt-tres">
-          <Cartao>
-            <EstadoCarregando />
-          </Cartao>
+          <EstadoCarregando formato="lista" />
           <Cartao>
             <EstadoVazio
               icone={Users}
@@ -675,6 +673,30 @@ return dados.map(...)`}
               onTentarDeNovo={() => {}}
             />
           </Cartao>
+        </div>
+      </Exemplo>
+
+      <Exemplo
+        titulo="Carregando: esqueleto no formato do conteúdo"
+        descricao="Em vez do spinner, mostre blocos cinza com o desenho do que vai chegar. Escolha o formato parecido com a tela; se ela muda entre PC e celular, passe formatoCelular também."
+        codigo={`
+<EstadoCarregando formato="lista" />                       // ItemLista (clientes, mecânicos, veículos)
+<EstadoCarregando formato="cartoes" linhas={2} />          // CartaoOS do celular
+<EstadoCarregando formato="tabela" linhas={4} colunas={5} /> // Tabela / TabelaOS
+<Cartao><EstadoCarregando formato="bloco" /></Cartao>       // conteúdo solto dentro de um cartão
+
+// Tabela no PC e cartões no celular:
+<EstadoCarregando formato="tabela" formatoCelular="cartoes" texto="Carregando ordens..." />`}
+      >
+        <div className="pilha">
+          <div className="vt-tres">
+            <EstadoCarregando formato="lista" />
+            <EstadoCarregando formato="cartoes" linhas={2} />
+            <Cartao>
+              <EstadoCarregando formato="bloco" />
+            </Cartao>
+          </div>
+          <EstadoCarregando formato="tabela" linhas={4} colunas={5} />
         </div>
       </Exemplo>
     </PaginaSecao>

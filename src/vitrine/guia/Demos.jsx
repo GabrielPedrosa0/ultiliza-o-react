@@ -171,7 +171,7 @@ function DemoUseApi() {
   }, [status, simularErro])
 
   let conteudo
-  if (carregando) conteudo = <EstadoCarregando />
+  if (carregando) conteudo = <EstadoCarregando formato="cartoes" linhas={2} />
   else if (erro) conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={() => setSimularErro(false)} />
   else if (dados.length === 0) conteudo = <EstadoVazio titulo="Nenhuma OS encontrada" />
   else

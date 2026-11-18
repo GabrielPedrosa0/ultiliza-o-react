@@ -92,7 +92,7 @@ function OrdensRecentes() {
   const { dados, carregando, erro, recarregar } = useApi(() => listarOrdensRecentes({ limite: 10 }))
 
   let conteudo
-  if (carregando) conteudo = <EstadoCarregando texto="Carregando ordens..." />
+  if (carregando) conteudo = <EstadoCarregando formato="tabela" linhas={5} colunas={5} texto="Carregando ordens..." />
   else if (erro) conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   else if (dados.itens.length === 0)
     conteudo = (
@@ -126,7 +126,7 @@ function EntregasHoje() {
   }
 
   let conteudo
-  if (carregando) conteudo = <EstadoCarregando />
+  if (carregando) conteudo = <EstadoCarregando formato="cartoes" />
   else if (erro) conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   else if (dados.itens.length === 0)
     conteudo = (
@@ -160,7 +160,7 @@ function MecanicosEmExpediente() {
   const { dados, carregando, erro, recarregar } = useApi(() => listarMecanicos({ emExpediente: true }))
 
   let conteudo
-  if (carregando) conteudo = <EstadoCarregando texto="Carregando equipe..." />
+  if (carregando) conteudo = <EstadoCarregando formato="lista" texto="Carregando equipe..." />
   else if (erro) conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   else if (dados.length === 0) conteudo = <EstadoVazio icone={HardHat} titulo="Ninguém em expediente agora." />
   else

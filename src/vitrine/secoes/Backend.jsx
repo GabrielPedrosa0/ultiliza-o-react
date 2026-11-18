@@ -257,7 +257,7 @@ export function SecTeste() {
             Testar
           </Botao>
         </div>
-        {teste.executando && <EstadoCarregando texto="Chamando o backend..." />}
+        {teste.executando && <EstadoCarregando formato="bloco" texto="Chamando o backend..." />}
         {teste.erro && (
           <Aviso tom="perigo" titulo={`Falhou${teste.erro.status ? ` (HTTP ${teste.erro.status})` : ''}`}>
             {teste.erro.message}

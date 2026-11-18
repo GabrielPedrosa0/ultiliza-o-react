@@ -75,7 +75,7 @@ export default function ExemploServicosPecas({ aba = 'servicos' }) {
   const { dados, carregando, erro, recarregar } = useApi(() => config.carregar({ busca }), [aba, busca])
 
   let conteudo
-  if (carregando) conteudo = <EstadoCarregando />
+  if (carregando) conteudo = <EstadoCarregando formato="tabela" formatoCelular="lista" linhas={5} />
   else if (erro) conteudo = <EstadoErro mensagem={erro.message} onTentarDeNovo={recarregar} />
   else if (dados.length === 0)
     conteudo = <EstadoVazio titulo={busca ? `Nada com “${busca}”.` : 'Nada cadastrado ainda.'} />
