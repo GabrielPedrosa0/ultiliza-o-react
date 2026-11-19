@@ -3,10 +3,6 @@
 Este guia é para quem **nunca usou React** ou quase não mexeu com frontend. Ele explica o mínimo de cada assunto,
 sempre com o código deste projeto, e termina com duas telas feitas do zero, passo a passo.
 
-> **Onde ler:** este mesmo texto está no começo da **vitrine de componentes**, com os exemplos funcionando ao vivo
-> (online: https://claude.ai/artifact/JwmiNpUaHFX2CuvBuadf5z, ou baixe `docs/vitrine-oficina.html` e abra no
-> navegador). Os exemplos ao vivo só aparecem na vitrine.
-> As tarefas de cada um estão em [`docs/issues.md`](issues.md).
 
 ## 1. Comece aqui
 
