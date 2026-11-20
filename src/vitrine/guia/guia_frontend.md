@@ -49,7 +49,8 @@ npm install        # só na primeira vez (baixa as bibliotecas para a pasta node
 npm run dev        # deixe rodando: cada vez que você salva um arquivo, a tela atualiza sozinha
 ```
 
-Abra http://localhost:5173 no navegador. Para ver a versão de celular: aperte **F12**, clique no ícone de celular
+Com o `npm run dev` rodando, digite `http://localhost:5173` na barra de endereço do navegador (esse endereço só existe no
+seu computador). Para ver a versão de celular: aperte **F12**, clique no ícone de celular
 e escolha 390 px de largura.
 
 ### Onde fica cada coisa
@@ -394,7 +395,7 @@ export default function ListaVeiculosPage() {
 }
 ```
 
-Salve e abra http://localhost:5173/veiculos. Já aparece com o menu, no PC e no celular.
+Salve e abra `http://localhost:5173/veiculos` no navegador do seu computador. Já aparece com o menu, no PC e no celular.
 
 **Passo 2 — buscar os dados.** Use o service e o `useApi`. Por enquanto, mostre quantos vieram:
 
@@ -592,7 +593,7 @@ Abra o **F12** sempre que algo estranho acontecer. As abas que importam:
 | “Sem conexão com o servidor” | O backend não está rodando | Terminal 1: ative o `.venv` e rode `uvicorn app:app --reload` |
 | “Essa rota ainda não existe no backend” | A tela chama uma rota que ninguém fez ainda (ex.: `/api/mecanicos`) | Combine com quem faz a rota; enquanto isso, teste na vitrine com os dados de exemplo |
 | `uvicorn: command not found` | O `.venv` não está ativo ou faltou o `pip install` | `source .venv/bin/activate` e `pip install -r requirements.txt` |
-| “Não encontrado.” | A rota ainda não existe no backend ou o endereço está errado | Confira em http://127.0.0.1:8000/api/docs |
+| “Não encontrado.” | A rota ainda não existe no backend ou o endereço está errado | Com o backend rodando, confira em `http://127.0.0.1:8000/api/docs` |
 | `Each child in a list should have a unique "key"` | Faltou `key` no `map` | `key={item.id}` |
 | `... is not a function` ou `undefined` no import | Import com ou sem chaves errado | Arquivo com `export default`: `import X from`; sem: `import { X } from` |
 | A tela não atualiza | Mudou o estado “na mão” | Use o `set...` com um objeto novo (seção 5) |

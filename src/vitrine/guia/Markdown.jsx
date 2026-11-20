@@ -12,8 +12,15 @@ const IDS = new Set(SECOES_GUIA.map((s) => s.id))
 function htmlDo(token, links) {
   const lista = [token]
   lista.links = links
-  return marked.parser(lista).replace(/<a href="(https?:)/g, '<a target="_blank" rel="noreferrer" href="$1')
+  return marked
+    .parser(lista)
+    .replace(LINK_LOCAL, '<code>$1</code>')
+    .replace(/<a href="(https?:)/g, '<a target="_blank" rel="noreferrer" href="$1')
 }
+
+// Endereços do computador de quem roda o projeto (localhost, 127.0.0.1) não abrem na vitrine
+// publicada: viram texto (código) para copiar, e não um link quebrado.
+const LINK_LOCAL = /<a href="https?:\/\/(?:localhost|127\.0\.0\.1)[^"]*">([^<]*)<\/a>/g
 
 export default function Markdown({ texto }) {
   const navigate = useNavigate()
